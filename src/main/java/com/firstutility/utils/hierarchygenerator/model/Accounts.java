@@ -4,6 +4,7 @@ public class Accounts {
 
     private String energyCustomerNumber;
     private String telcoCustomerNumber;
+    private String parentCustomerNumber;
     private String errorMessage;
 
     public Accounts() {}
@@ -21,16 +22,18 @@ public class Accounts {
 
     public void setTelcoCustomerNumber(String telcoCustomerNumber) { this.telcoCustomerNumber = telcoCustomerNumber; }
 
-    public String getErrorMessage() { return errorMessage;
-    }
+    public String getParentCustomerNumber() { return parentCustomerNumber; }
+
+    public void setParentCustomerNumber(String parentCustomerNumber) { this.parentCustomerNumber = parentCustomerNumber; }
+
+    public String getErrorMessage() { return errorMessage; }
 
     public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
 
     @Override
     public String toString() {
-        return "Accounts{" + "energyCustomerNumber='" + energyCustomerNumber + '\'' + ", "
-                + "telcoCustomerNumber='" + telcoCustomerNumber
-                + '\''
-                + '}';
+        return "Accounts{" + "energyCustomerNumber='" + energyCustomerNumber + '\'' + ", telcoCustomerNumber='"
+                + telcoCustomerNumber + '\'' + ", parentCustomerNumber='" + parentCustomerNumber + '\''
+                + ", errorMessage='" + errorMessage + '\'' + '}';
     }
 }

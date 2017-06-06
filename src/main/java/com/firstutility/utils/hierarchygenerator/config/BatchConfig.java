@@ -60,9 +60,12 @@ public class BatchConfig {
     public FlatFileItemReader<Accounts> inputFileReader() {
         final FlatFileItemReader<Accounts> reader = new FlatFileItemReader<>();
         reader.setResource(new FileSystemResource(new File(inputDataFile)));
+        reader.setStrict(false);
         reader.setLineMapper(new DefaultLineMapper<Accounts>() {{
             setLineTokenizer(new DelimitedLineTokenizer() {{
-                setNames(new String[] { "energyCustomerNumber", "telcoCustomerNumber" });
+                setNames(new String[] {
+                        "energyCustomerNumber",
+                        "telcoCustomerNumber" });
             }});
             setFieldSetMapper(new BeanWrapperFieldSetMapper<Accounts>() {{
                 setTargetType(Accounts.class);
@@ -82,7 +85,11 @@ public class BatchConfig {
         writer.setResource(new FileSystemResource(new File(outputErrorFile)));
         writer.setLineAggregator(new DelimitedLineAggregator<Accounts>() {{
             setFieldExtractor(new BeanWrapperFieldExtractor<Accounts>() {{
-                setNames(new String[] { "energyCustomerNumber", "telcoCustomerNumber", "errorMessage" });
+                setNames(new String[] {
+                        "energyCustomerNumber",
+                        "telcoCustomerNumber",
+                        "parentCustomerNumber",
+                        "errorMessage" });
             }});
         }});
         return writer;

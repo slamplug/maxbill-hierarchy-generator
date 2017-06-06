@@ -1,5 +1,6 @@
 package com.firstutility.utils.hierarchygenerator.client.maxbill;
 
+import static java.lang.String.format;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 import com.firstutility.reach.customerservice.response.update.dto.Response;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -32,16 +34,21 @@ public class MaxBillClientImpl implements MaxBillClient {
 
         final String url = fromUriString(maxbillFindCustomerUrl).buildAndExpand(customerNumber).toUriString();
 
-        Response response = execute(url, HttpMethod.GET, null, Response.class);
+        ResponseEntity responseEntity = execute(url, HttpMethod.GET, null, Response.class);
+
+        if (responseEntity.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            throw new CantProcessAccountsException(format(
+                    "Customers were not found for customerNo: %s", customerNumber));
+        }
+
+        Response response = (Response) responseEntity.getBody();
 
         return response.getOk().getCustomers().get(0).getStatus().equals("Active");
     }
 
-    private <R> R execute(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<R> responseType) {
+    private <R> ResponseEntity<R> execute(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<R> responseType) {
         try {
-            ResponseEntity<R> response = restOperations.exchange(url, httpMethod, httpEntity, responseType);
-
-            return response.getBody();
+            return restOperations.exchange(url, httpMethod, httpEntity, responseType);
 
         } catch (RestClientException e) {
             throw new CantProcessAccountsException("url: " + url + ", method: " + httpMethod.toString() +

@@ -34,7 +34,7 @@ public class AccountsHierarchyServiceImpl implements AccountsHierarchyService {
     }
 
     @Override
-    public void createAccountsHierarchy(Accounts accounts) {
+    public String createAccountsHierarchy(Accounts accounts) {
 
         checkAccountActive(accounts.getEnergyCustomerNumber());
         checkAccountActive(accounts.getTelcoCustomerNumber());
@@ -54,6 +54,8 @@ public class AccountsHierarchyServiceImpl implements AccountsHierarchyService {
                 parentCustomerNumber);
 
         log.info("hierarchy :" + hierarchy);
+
+        return parentCustomerNumber;
     }
 
     private void checkAccountActive(final String customerNumber) {

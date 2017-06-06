@@ -47,9 +47,7 @@ public class CustomerServiceClientImpl implements CustomerServiceClient {
 
         final String url = fromUriString(customerRelationsServiceUrl).queryParams(queryParams).build().toUriString();
 
-        CustomerRelations response = execute(url, GET, null, CustomerRelations.class);
-
-        return response;
+        return execute(url, GET, null, CustomerRelations.class);
     }
 
     @Override

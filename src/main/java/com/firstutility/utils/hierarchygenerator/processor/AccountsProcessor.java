@@ -26,8 +26,11 @@ public class AccountsProcessor implements ItemProcessor<Accounts, Accounts> {
 
         log.info(accounts.toString());
 
-        accountsHierarchyService.createAccountsHierarchy(accounts);
+        final String parentCustomerNumber =
+                accountsHierarchyService.createAccountsHierarchy(accounts);
 
-        return null;
+        accounts.setParentCustomerNumber(parentCustomerNumber);
+
+        return accounts;
     }
 }
